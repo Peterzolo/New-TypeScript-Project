@@ -28,6 +28,11 @@ const UserSchema = new Schema(
                 default: [],
             },
         ],
+
+        
+        // Those users who add your ID to their accoun
+
+
         followers: [
             {
                 type: Schema.Types.ObjectId,
@@ -36,6 +41,8 @@ const UserSchema = new Schema(
             },
         ], 
 
+        //Those whose IDs you add to your account.
+
         followings: [
             {
                 type: Schema.Types.ObjectId,
@@ -43,6 +50,8 @@ const UserSchema = new Schema(
                 default: [],
             },
         ],
+
+        
         role: {
             type: String,
             enum: ['user', 'admin'],

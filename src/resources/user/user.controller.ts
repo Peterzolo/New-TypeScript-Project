@@ -230,16 +230,14 @@ class UserController implements Controller {
             if (!findUser) {
                 throw new Error('User not found');
             }
-   
-
 
             if (id === userId.id || findUser.role === 'admin') {
-                const deletedUser  = await this.UserService.deleteAccount(
+                const deletedUser = await this.UserService.deleteAccount(
                     id,
                     userId
                 );
 
-                if (!deletedUser || deletedUser.status === "inactive") {
+                if (!deletedUser || deletedUser.status === 'inactive') {
                     throw new Error('Account not active');
                 }
 
@@ -262,26 +260,19 @@ class UserController implements Controller {
         next: NextFunction
     ): Promise<Response | Array<object> | string | void> => {
         try {
-            let loggedIn = await userModel.findById(req.user._id);
-            let paramsUser = await userModel.findById(req.params.id);
-
-            if (loggedIn == paramsUser) {
-                throw new Error('You cannot follow yourselff');
-            }
-
-            const loggedInFollowers = loggedIn?.followers;
-
-            console.log(loggedInFollowers);
+           
+            const loggedIn = req.user._id.toString();
+            const paramsUser = req.params.id;
 
             if (loggedIn === paramsUser) {
                 res.status(404).json({ message: 'You cannot follow yourself' });
             } else {
-                let followUser = await userModel.findOneAndUpdate(
+                let followUser = await userModel.findByIdAndUpdate(
                     { _id: paramsUser },
                     { $addToSet: { followers: loggedIn } },
                     { new: true }
                 );
-                let user = await userModel.findOneAndUpdate(
+                let user = await userModel.findByIdAndUpdate(
                     { _id: loggedIn },
                     { $addToSet: { followings: paramsUser } },
                     { new: true }
@@ -290,10 +281,8 @@ class UserController implements Controller {
             return res
                 .status(200)
                 .send({ message: 'User followed successfully' });
-        } catch (err) {
-            return res
-                .status(500)
-                .send({ message: 'Error while tried to follow a user' });
+        } catch (error) {
+            return next(new HttpException(404, error.message));
         }
     };
 
