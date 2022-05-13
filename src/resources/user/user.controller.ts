@@ -106,7 +106,7 @@ class UserController implements Controller {
 
             const token = await this.UserService.login(email, password);
 
-            res.status(200).json({ email,token });
+            res.status(200).json({ email, token });
         } catch (error) {
             next(new HttpException(400, error.message));
         }
@@ -182,18 +182,19 @@ class UserController implements Controller {
             const userId = req.user;
             let { id } = req.params;
             let userObj = req.body;
-            // let password = userObj.password;
+            let password = userObj.password;
+
+            const salt = await bcrypt.genSalt(10);
+            if (req.body.password) {
+                req.body.password = await bcrypt.hashSync(password, salt);
+            }
 
             const findUser = await this.UserService.userExists(userId);
             if (!findUser) {
                 throw new Error('User not found');
             }
 
-            console.log('ID', id);
-            console.log('USER ID', userId.id);
-            console.log('ROLE', findUser.role);
-
-            if (id === userId.id || findUser.role === 'admin') {
+            if (id === userId.id) {
                 const updatedUser = await this.UserService.editOwwnAccount(
                     id,
                     userId,
@@ -212,13 +213,6 @@ class UserController implements Controller {
             } else {
                 throw new Error('Sorry you are authorized');
             }
-
-            // const salt = await bcrypt.genSalt(10);
-            // const hashedPassword = await bcrypt.hash(password, salt);
-
-            // if (password) {
-            //     password = hashedPassword;
-            // }
         } catch (error) {
             return next(new HttpException(404, error.message));
         }
