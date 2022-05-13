@@ -9,6 +9,7 @@ export default interface User extends Document {
     followings? :Array<object>;
     posts?:Array<object>;
     role: string;
+    status:string;
 
     isValidPassword(password: string): Promise<Error | boolean>;
 }

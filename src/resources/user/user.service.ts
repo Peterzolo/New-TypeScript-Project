@@ -102,7 +102,7 @@ class UserService {
         }
     }
 
-    public async editOwwnAccount(id: {}, userId: {}, editObj: {}) {
+    public async editAccount(id: {}, userId: {}, editObj: {}) {
         try {
             const editOwn = await this.user
                 .findByIdAndUpdate(
@@ -117,11 +117,11 @@ class UserService {
         }
     }
 
-    public async deleteOwwnAccount(userId: {}) {
+    public async deleteAccount(id: {}, userId: {}) {
         try {
             const deleteOwn = await this.user
                 .findByIdAndUpdate(
-                    { _id: userId },
+                    { _id: id, user: userId  },
                     { $set: { status: 'inactive' } },
                     { new: true }
                 )

@@ -45,9 +45,9 @@ class UserController implements Controller {
             this.updateUser
         );
         this.router.delete(
-            `${this.path}/remove-own`,
+            `${this.path}/remove/:id`,
             authenticated,
-            this.removeOwnAccount
+            this.removeAccount
         );
         this.router.put(
             `${this.path}/:id/follow`,
@@ -159,7 +159,6 @@ class UserController implements Controller {
             const userId = req.user._id;
 
             const ownUser = await this.UserService.fetchOwwn(userId);
-            console.log('OWN USER', ownUser);
             if (!ownUser) {
                 throw new Error('Something went wrong');
             }
@@ -195,7 +194,7 @@ class UserController implements Controller {
             }
 
             if (id === userId.id) {
-                const updatedUser = await this.UserService.editOwwnAccount(
+                const updatedUser = await this.UserService.editAccount(
                     id,
                     userId,
                     userObj
@@ -218,34 +217,42 @@ class UserController implements Controller {
         }
     };
 
-    private removeOwnAccount = async (
+    private removeAccount = async (
         req: Request,
         res: Response,
         next: NextFunction
     ): Promise<Response | number | string | void> => {
         try {
-            const userId = req.user._id;
-            const deleteObj = req.body.status;
+            const userId = req.user;
+            let { id } = req.params;
 
             const findUser = await this.UserService.userExists(userId);
             if (!findUser) {
                 throw new Error('User not found');
             }
+   
 
-            const deletedUser = await this.UserService.deleteOwwnAccount(
-                userId
-            );
 
-            if (!deletedUser) {
-                throw new Error('Something went wrong');
+            if (id === userId.id || findUser.role === 'admin') {
+                const deletedUser  = await this.UserService.deleteAccount(
+                    id,
+                    userId
+                );
+
+                if (!deletedUser || deletedUser.status === "inactive") {
+                    throw new Error('Account not active');
+                }
+
+                res.status(200).json({
+                    Success: true,
+                    Message: 'Users successfully Deleted',
+                    data: deletedUser,
+                });
+            } else {
+                throw new Error('Sorry you are authorized');
             }
-            res.status(200).json({
-                Success: true,
-                Message: 'Users successfully deleted',
-                Data: deletedUser,
-            });
         } catch (error) {
-            return next(new HttpException(404, 'Could not edit user'));
+            return next(new HttpException(404, error.message));
         }
     };
 
