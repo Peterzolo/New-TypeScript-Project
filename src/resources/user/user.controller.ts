@@ -9,6 +9,7 @@ import bcrypt from 'bcrypt';
 import userModel from './user.model';
 
 class UserController implements Controller {
+    
     public path = '/users';
     public router = Router();
     private UserService = new UserService();

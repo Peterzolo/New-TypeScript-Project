@@ -7,14 +7,19 @@ const PostSchema = new Schema(
             type: String,
             required: true,
         },
+        description: {
+            type: String,
+            required: true,
+        },
         body: {
             type: String,
             required: true,
         },
-        author:{
-            type : Schema.Types.ObjectId,
-            ref : 'user'
-        }
+        author: {
+            type: Schema.Types.ObjectId,
+            ref: 'user',
+            required: true,
+        },
     },
     { timestamps: true }
 );
