@@ -7,6 +7,16 @@ export class PostService {
     /**
      * Create a new post
      */
+    
+     public async findPostById(id : string) {
+        try {
+            const post = await this.post.findById({_id: id, status: 'active' });
+            return post;
+        } catch (error) {
+            throw new Error('Could not fetch posts');
+        }
+    }
+
 
     public async create(
         title: string,
@@ -60,7 +70,24 @@ export class PostService {
             throw new Error('Could not fetch posts');
         }
     }
+
+
+    public async editPost(id: {}, userId: {}, editObj: {}) {
+        try {
+            const post = await this.post
+                .findByIdAndUpdate(
+                    { _id: id, user: userId },
+                    { $set: editObj },
+                    { new: true }
+                );
+            return post;
+        } catch (error) {
+            throw new Error(error.message);
+        }
+    }
 }
+   
+
 
 
 
