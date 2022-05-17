@@ -1,0 +1,62 @@
+
+.logo-image{
+    border-radius: 100%;
+}
+.custom-link{
+    color: #ffff;
+}
+
+.app-name{
+    color: deepskyblue;
+}
+
+.developer-section{
+  background-color: rgb(29, 27, 27);
+}
+
+.dev-container{
+    margin: 0 auto;
+    background-color: rgb(59, 58, 58);
+    padding: 10px;
+    border-radius: 10px;
+}
+.dev-by{
+font-weight: bold;
+color: deepskyblue;
+font-size: 20px;
+text-align: center;
+}
+.dev-sub-cont{
+    text-align: center;
+}
+
+.dev-title{
+color: rgb(187, 201, 240);
+font-weight: 700;
+text-align: center;
+}
+.dev-desc{
+color: #ffff;
+text-align: center;
+}
+
+.developer-section2{
+    background-color: rgb(29, 27, 27);
+    margin-top: 5px;
+  }
+
+  .feature-title{
+      margin-top: 5px;
+      background-color: rgb(99, 99, 96);
+      padding: 5px;
+      border-radius: 7px;
+  }
+
+  .feature-url{
+      padding: 5px;
+      margin-top: 5px;
+  }
+  .feature-url a{
+     text-decoration: none;
+     color: lightblue;
+  }

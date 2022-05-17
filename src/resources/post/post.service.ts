@@ -85,6 +85,20 @@ export class PostService {
             throw new Error(error.message);
         }
     }
+
+    public async removePost(id: {}, userId: {}) {
+        try {
+            const post = await this.post
+                .findByIdAndUpdate(
+                    { _id: id, user: userId },
+                    { $set: {status : "inactive"} },
+                    { new: true }
+                );
+            return post;
+        } catch (error) {
+            throw new Error(error.message);
+        }
+    }
 }
    
 

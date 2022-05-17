@@ -14,6 +14,13 @@ class App {
     constructor(controllers: Controller[], port: number) {
         this.express = express();
         this.port = port;
+     
+        this.express.use(express.static("public"))
+
+        this.express.get("/", (req, res) =>{
+            res.send("index")
+        })
+
 
         this.initialiseDatabaseConnection(); 
         this.initialiseMiddleware();
@@ -28,6 +35,8 @@ class App {
         this.express.use(express.json());
         this.express.use(express.urlencoded({ extended: false }));
         this.express.use(compression());
+      
+        // this.express.use()
     }
 
     private initialiseControllers(controllers: Controller[]): void {

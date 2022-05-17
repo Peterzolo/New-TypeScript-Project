@@ -26,6 +26,7 @@ class PostController implements Controller {
         this.router.get(`${this.path}/fetch-all`, this.getAllPosts);
         this.router.get(`${this.path}/fetch-one/:id`, this.getPost);
         this.router.put(`${this.path}/edit/:id`,authenticated, this.updatePost);
+        this.router.delete(`${this.path}/remove/:id`,authenticated, this.deletePost);
         this.router.get(`${this.path}/fetch-one/:id`, this.getPost);
     }
 
@@ -135,6 +136,47 @@ class PostController implements Controller {
                     Success: true,
                     Message: 'Users successfully updated',
                     data: updatedPost,
+                });
+            }
+        } catch (error) {
+            return next(new HttpException(404, error.message));
+        }
+    };
+    private deletePost = async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<Response | number | string | {} | void> => {
+        try {
+            const userId = req.user;
+            let { id } = req.params;
+            let userObj = req.body;
+      
+
+           const findPost = await this.PostService.findPostById(id)
+      
+
+        const postOwner  = findPost?.author
+      
+
+            if (postOwner !== userId._id) {
+               
+                throw new Error('Sorry you are authorized');
+            } else {
+
+                const deleteddPost = await this.PostService.removePost(    
+                    id,
+                    userId
+                );
+
+                if (!deleteddPost) {
+                    throw new Error('Something went wrong');
+                }
+
+                res.status(200).json({
+                    Success: true,
+                    Message: 'Users successfully deleted',
+                    data: deleteddPost,
                 });
             }
         } catch (error) {
