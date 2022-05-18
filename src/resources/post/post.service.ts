@@ -22,6 +22,7 @@ export class PostService {
         title: string,
         description: string,
         body: string,
+        image:string,
         author: object,
         status: string
     ): Promise<string | {} | Error> {
@@ -39,6 +40,7 @@ export class PostService {
                 description,
                 body,
                 author,
+                image,
                 status,
             });
             return {
@@ -46,16 +48,17 @@ export class PostService {
                 description,
                 body,
                 author,
+                image,
                 status,
             };
         } catch (error) {
-            throw new Error(error.message);
+            throw new Error(error.message);  
         }
     }
 
     public async getPosts() {
         try {
-            const allPosts = await this.post.find({ status: 'active' });
+            const allPosts = await this.post.find({ status: 'active' })
             return allPosts;
         } catch (error) {
             throw new Error('Could not fetch posts');

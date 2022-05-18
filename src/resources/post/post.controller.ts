@@ -36,7 +36,7 @@ class PostController implements Controller {
         next: NextFunction
     ): Promise<Response | void> => {
         try {
-            const { title, description, body, author, status } = req.body;
+            const { title, description, body,image, author, status } = req.body;
 
             const userId = req.user._id;
             const bodyAuthor = req.body.author;
@@ -51,6 +51,7 @@ class PostController implements Controller {
                 title,
                 description,
                 body,
+                image,
                 author,
                 status
             );
